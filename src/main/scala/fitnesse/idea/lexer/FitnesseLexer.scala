@@ -83,6 +83,11 @@ class FitnesseLexer extends LexerBase {
         case FitnesseLexer.LexerSymbolType(elementType) => elementType
         case _: WikiWord => FitnesseTokenType.WIKI_WORD
         case _: Collapsible => FitnesseTokenType.COLLAPSIBLE_START
+        case _: Include => FitnesseTokenType.INCLUDE
+        case _: Comment => FitnesseTokenType.COMMENT
+        case _: Define => FitnesseTokenType.DEFINE
+        case _: Variable => FitnesseTokenType.DEFINE
+        case _: HeaderLine => FitnesseTokenType.HEADER
         case SymbolType.Bold => FitnesseTokenType.BOLD
         case SymbolType.Italic => FitnesseTokenType.ITALIC
         case SymbolType.Whitespace => FitnesseTokenType.WHITE_SPACE
@@ -91,7 +96,7 @@ class FitnesseLexer extends LexerBase {
         case Table.tableRow => FitnesseTokenType.ROW_START
         case Table.tableCell => FitnesseTokenType.CELL_START
         case SymbolType.Colon => FitnesseTokenType.COLON
-        case _ => FitnesseTokenType.WORD
+        case _ => FitnesseTokenType.TEXT
       }
     }
   }

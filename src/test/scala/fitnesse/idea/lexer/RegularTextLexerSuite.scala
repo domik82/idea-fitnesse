@@ -4,7 +4,7 @@ class RegularTextLexerSuite extends LexerSuite {
   test("Single word") {
     assertResult(
       List(
-        (FitnesseTokenType.WORD, "Hello")
+        (FitnesseTokenType.TEXT, "Hello")
       )) {
       lex("Hello")
     }
@@ -13,7 +13,7 @@ class RegularTextLexerSuite extends LexerSuite {
   test("Single word with number") {
     assertResult(
       List(
-        (FitnesseTokenType.WORD, "Hello1")
+        (FitnesseTokenType.TEXT, "Hello1")
       )) {
       lex("Hello1")
     }
@@ -22,9 +22,9 @@ class RegularTextLexerSuite extends LexerSuite {
   test("Two words") {
     assertResult(
       List(
-        (FitnesseTokenType.WORD, "Foo"),
+        (FitnesseTokenType.TEXT, "Foo"),
         (FitnesseTokenType.WHITE_SPACE, " "),
-        (FitnesseTokenType.WORD, "bar")
+        (FitnesseTokenType.TEXT, "bar")
       )) {
       lex("Foo bar")
     }
@@ -33,7 +33,7 @@ class RegularTextLexerSuite extends LexerSuite {
   test("Number") {
     assertResult(
       List(
-        (FitnesseTokenType.WORD, "123")
+        (FitnesseTokenType.TEXT, "123")
       )) {
       lex("123")
     }
@@ -41,7 +41,7 @@ class RegularTextLexerSuite extends LexerSuite {
 
   test("CamelCase word where first letter is lower case") {
     assertResult(List(
-      (FitnesseTokenType.WORD, "thisIsCamelCase")
+      (FitnesseTokenType.TEXT, "thisIsCamelCase")
 
     )) {
       lex("thisIsCamelCase")
@@ -51,7 +51,7 @@ class RegularTextLexerSuite extends LexerSuite {
   test("Word that looks like a WikiWord but has 2 capital letters in a row ") {
     assertResult(
       List(
-        (FitnesseTokenType.WORD, "ThisIsNotAWikiWord")
+        (FitnesseTokenType.TEXT, "ThisIsNotAWikiWord")
       )) {
       lex("ThisIsNotAWikiWord")
     }
@@ -60,7 +60,7 @@ class RegularTextLexerSuite extends LexerSuite {
   test("USAforEver is a regular word") {
     assertResult(
       List(
-        (FitnesseTokenType.WORD, "USAforEver")
+        (FitnesseTokenType.TEXT, "USAforEver")
       )) {
       lex("USAforEver")
     }
@@ -69,13 +69,13 @@ class RegularTextLexerSuite extends LexerSuite {
   test("A sentence") {
     assertResult(
       List(
-        (FitnesseTokenType.WORD, "This"),
+        (FitnesseTokenType.TEXT, "This"),
         (FitnesseTokenType.WHITE_SPACE, " "),
-        (FitnesseTokenType.WORD, "is"),
+        (FitnesseTokenType.TEXT, "is"),
         (FitnesseTokenType.WHITE_SPACE, " "),
-        (FitnesseTokenType.WORD, "a"),
+        (FitnesseTokenType.TEXT, "a"),
         (FitnesseTokenType.WHITE_SPACE, " "),
-        (FitnesseTokenType.WORD, "sentence.")
+        (FitnesseTokenType.TEXT, "sentence.")
       )) {
       lex("This is a sentence.")
     }

@@ -4,11 +4,11 @@ class MiscLexerSuite extends LexerSuite {
   test("Regular text followed by Wiki Word") {
     assertResult(
       List(
-        (FitnesseTokenType.WORD, "Some"),
+        (FitnesseTokenType.TEXT, "Some"),
         (FitnesseTokenType.WHITE_SPACE, " "),
-        (FitnesseTokenType.WORD, "text"),
+        (FitnesseTokenType.TEXT, "text"),
         (FitnesseTokenType.WHITE_SPACE, " "),
-        (FitnesseTokenType.WORD, "and"),
+        (FitnesseTokenType.TEXT, "and"),
         (FitnesseTokenType.WHITE_SPACE, " "),
         (FitnesseTokenType.WIKI_WORD, "WikiWord")
       )) {
@@ -62,18 +62,18 @@ class MiscLexerSuite extends LexerSuite {
         (FitnesseTokenType.TABLE_START, "|abc|\n|xyz|\n"),
         (FitnesseTokenType.ROW_START, "abc|\n|"),
         (FitnesseTokenType.CELL_START, "abc|\n|"),
-        (FitnesseTokenType.WORD, "abc"),
+        (FitnesseTokenType.TEXT, "abc"),
         (FitnesseTokenType.CELL_END, "|\n|"),
         (FitnesseTokenType.ROW_END, "|\n|"),
         (FitnesseTokenType.ROW_START, "xyz|\n"),
         (FitnesseTokenType.CELL_START, "xyz|\n"),
-        (FitnesseTokenType.WORD, "xyz"),
+        (FitnesseTokenType.TEXT, "xyz"),
         (FitnesseTokenType.CELL_END, "|\n"),
         (FitnesseTokenType.ROW_END, "|\n"),
         (FitnesseTokenType.TABLE_END, "|\n"),
-        (FitnesseTokenType.WORD, "some"),
+        (FitnesseTokenType.TEXT, "some"),
         (FitnesseTokenType.WHITE_SPACE, " "),
-        (FitnesseTokenType.WORD, "text")
+        (FitnesseTokenType.TEXT, "text")
       )) {
       lex("|abc|\n|xyz|\nsome text")
     }
@@ -86,19 +86,19 @@ class MiscLexerSuite extends LexerSuite {
         (FitnesseTokenType.ROW_START, " abc |\n|"),
         (FitnesseTokenType.CELL_START, " abc |\n|"),
         (FitnesseTokenType.WHITE_SPACE, " "),
-        (FitnesseTokenType.WORD, "abc"),
+        (FitnesseTokenType.TEXT, "abc"),
         (FitnesseTokenType.WHITE_SPACE, " "),
         (FitnesseTokenType.CELL_END, "|\n|"),
         (FitnesseTokenType.ROW_END, "|\n|"),
         (FitnesseTokenType.ROW_START, "xyz|\n"),
         (FitnesseTokenType.CELL_START, "xyz|\n"),
-        (FitnesseTokenType.WORD, "xyz"),
+        (FitnesseTokenType.TEXT, "xyz"),
         (FitnesseTokenType.CELL_END, "|\n"),
         (FitnesseTokenType.ROW_END, "|\n"),
         (FitnesseTokenType.TABLE_END, "|\n"),
-        (FitnesseTokenType.WORD, "some"),
+        (FitnesseTokenType.TEXT, "some"),
         (FitnesseTokenType.WHITE_SPACE, " "),
-        (FitnesseTokenType.WORD, "text")
+        (FitnesseTokenType.TEXT, "text")
       )) {
       lex("| abc |\n|xyz|\nsome text")
     }
@@ -110,12 +110,12 @@ class MiscLexerSuite extends LexerSuite {
         (FitnesseTokenType.TABLE_START, "|abc|\n|xyz|\n"),
         (FitnesseTokenType.ROW_START, "abc|\n|"),
         (FitnesseTokenType.CELL_START, "abc|\n|"),
-        (FitnesseTokenType.WORD, "abc"),
+        (FitnesseTokenType.TEXT, "abc"),
         (FitnesseTokenType.CELL_END, "|\n|"),
         (FitnesseTokenType.ROW_END, "|\n|"),
         (FitnesseTokenType.ROW_START, "xyz|\n"),
         (FitnesseTokenType.CELL_START, "xyz|\n"),
-        (FitnesseTokenType.WORD, "xyz"),
+        (FitnesseTokenType.TEXT, "xyz"),
         (FitnesseTokenType.CELL_END, "|\n"),
         (FitnesseTokenType.ROW_END, "|\n"),
         (FitnesseTokenType.TABLE_END, "|\n"),
@@ -129,12 +129,12 @@ class MiscLexerSuite extends LexerSuite {
     assertResult(
       List(
         (FitnesseTokenType.COLLAPSIBLE_START, "!* abc\ndef\n*!"),
-        (FitnesseTokenType.WORD, "abc"),
-        (FitnesseTokenType.WORD, "def"),
+        (FitnesseTokenType.TEXT, "abc"),
+        (FitnesseTokenType.TEXT, "def"),
         (FitnesseTokenType.LINE_TERMINATOR, "\n"),
         (FitnesseTokenType.COLLAPSIBLE_END, "*!"),
         (FitnesseTokenType.WHITE_SPACE, " "),
-        (FitnesseTokenType.WORD, "word")
+        (FitnesseTokenType.TEXT, "word")
       )) {
       lex("!* abc\ndef\n*! word")
     }
@@ -144,16 +144,16 @@ class MiscLexerSuite extends LexerSuite {
     assertResult(
       List(
         (FitnesseTokenType.COLLAPSIBLE_START, "!* title\n|abc|\n|xyz|\n*!"),
-        (FitnesseTokenType.WORD, "title"),
+        (FitnesseTokenType.TEXT, "title"),
         (FitnesseTokenType.TABLE_START, "|abc|\n|xyz|\n"),
         (FitnesseTokenType.ROW_START, "abc|\n|"),
         (FitnesseTokenType.CELL_START, "abc|\n|"),
-        (FitnesseTokenType.WORD, "abc"),
+        (FitnesseTokenType.TEXT, "abc"),
         (FitnesseTokenType.CELL_END, "|\n|"),
         (FitnesseTokenType.ROW_END, "|\n|"),
         (FitnesseTokenType.ROW_START, "xyz|\n"),
         (FitnesseTokenType.CELL_START, "xyz|\n"),
-        (FitnesseTokenType.WORD, "xyz"),
+        (FitnesseTokenType.TEXT, "xyz"),
         (FitnesseTokenType.CELL_END, "|\n"),
         (FitnesseTokenType.ROW_END, "|\n"),
         (FitnesseTokenType.TABLE_END, "|\n"),

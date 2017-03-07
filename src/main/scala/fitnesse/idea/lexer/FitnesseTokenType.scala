@@ -10,7 +10,7 @@ class FitnesseTokenType(debugName: String) extends IElementType(debugName, Fitne
 
 object FitnesseTokenType {
   final val WIKI_WORD: IElementType = new FitnesseTokenType("WIKI_WORD")
-  final val WORD: IElementType = new FitnesseTokenType("WORD")
+  final val TEXT: IElementType = new FitnesseTokenType("TEXT")
   final val COLON: IElementType = new FitnesseTokenType("COLON")
   final val WHITE_SPACE: IElementType = TokenType.WHITE_SPACE
 
@@ -26,8 +26,11 @@ object FitnesseTokenType {
   final val COLLAPSIBLE_START: IElementType = new FitnesseTokenType("COLLAPSIBLE_START")
   final val COLLAPSIBLE_END: IElementType = new FitnesseTokenType("COLLAPSIBLE_END")
 
+  final val COMMENT: IElementType = new FitnesseTokenType("COMMENT")
+  final val DEFINE: IElementType = new FitnesseTokenType("DEFINE")
+  final val INCLUDE: IElementType = new FitnesseTokenType("INCLUDE")
+  final val HEADER: IElementType = new FitnesseTokenType("HEADER")
   final val BOLD: IElementType = new FitnesseTokenType("BOLD")
   final val ITALIC: IElementType = new FitnesseTokenType("ITALIC")
-
 
 }

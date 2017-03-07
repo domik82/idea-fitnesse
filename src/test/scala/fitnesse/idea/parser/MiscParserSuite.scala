@@ -7,7 +7,7 @@ class MiscParserSuite extends ParserSuite {
   test("Period followed by word") {
     assertResult(
       Node(FitnesseElementType.FILE, List(
-        Leaf(FitnesseTokenType.WORD, ".Hello")
+        Leaf(FitnesseTokenType.TEXT, ".Hello")
       ))
     ) {
       parse(".Hello")
@@ -17,7 +17,7 @@ class MiscParserSuite extends ParserSuite {
   test("> followed by word") {
     assertResult(
       Node(FitnesseElementType.FILE, List(
-        Leaf(FitnesseTokenType.WORD, ">Hello")
+        Leaf(FitnesseTokenType.TEXT, ">Hello")
       ))
     ) {
       parse(">Hello")
@@ -27,7 +27,7 @@ class MiscParserSuite extends ParserSuite {
   test("< followed by word") {
     assertResult(
       Node(FitnesseElementType.FILE, List(
-        Leaf(FitnesseTokenType.WORD, "<Hello")
+        Leaf(FitnesseTokenType.TEXT, "<Hello")
       ))
     ) {
       parse("<Hello")
@@ -49,12 +49,12 @@ class MiscParserSuite extends ParserSuite {
       Node(FitnesseElementType.FILE, List(
         Node(FitnesseElementType.COLLAPSIBLE, List(
           Leaf(FitnesseTokenType.COLLAPSIBLE_START, "!* "),
-          Leaf(FitnesseTokenType.WORD, "title\n"),
+          Leaf(FitnesseTokenType.TEXT, "title\n"),
           Node(TableElementType.DECISION_TABLE, List(
             Leaf(FitnesseTokenType.TABLE_START,"|"),
             Node(FitnesseElementType.ROW, List(
               Node(FitnesseElementType.FIXTURE_CLASS, List(
-                Leaf(FitnesseTokenType.WORD, "abc")
+                Leaf(FitnesseTokenType.TEXT, "abc")
               ))
             ))
           )),
