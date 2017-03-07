@@ -8,7 +8,9 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.{PsiClass, PsiElement, PsiIdentifier}
 import fitnesse.idea.etc.SearchScope.searchScope
 import fitnesse.idea.filetype.FitnesseFileType
+import fitnesse.idea.fixtureclass.{FixtureClass, FixtureClassIndex}
 
+import scala.collection.JavaConversions._
 
 class FitNesseLineMarkerProvider extends RelatedItemLineMarkerProvider {
   override def collectNavigationMarkers(element: PsiElement, result: util.Collection[_ >: RelatedItemLineMarkerInfo[_ <: PsiElement]]): Unit = {
@@ -16,7 +18,7 @@ class FitNesseLineMarkerProvider extends RelatedItemLineMarkerProvider {
       case clazz: PsiIdentifier if clazz.getParent.isInstanceOf[PsiClass] =>
         val project = element.getProject
         val fixtureClasses = findFixtureClasses(element.getProject, clazz)
-        if (fixtureClasses.size > 0) {
+        if (fixtureClasses.nonEmpty) {
           val builder = NavigationGutterIconBuilder
             .create(FitnesseFileType.FILE_ICON)
             .setTargets(fixtureClasses)
@@ -27,9 +29,7 @@ class FitNesseLineMarkerProvider extends RelatedItemLineMarkerProvider {
     }
   }
 
-  def findFixtureClasses(project: Project, key: PsiIdentifier): util.Collection[FixtureClass] = {
-    val className = key.getText
-    
-    FixtureClassIndex.INSTANCE.get(className, project, searchScope(project))
+  def findFixtureClasses(project: Project, key: PsiIdentifier): List[FixtureClass] = {
+    FixtureClassIndex.INSTANCE.get(key.getText, project, searchScope(project)).toList
   }
 }

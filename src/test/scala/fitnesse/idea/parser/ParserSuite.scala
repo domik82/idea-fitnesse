@@ -17,11 +17,14 @@ import com.intellij.psi.impl.source.SourceTreeToPsiMap
 import com.intellij.psi.impl.source.tree.{FileElement, CompositeElement}
 import com.intellij.psi.impl.{PsiFileFactoryImpl, PsiManagerEx}
 import com.intellij.psi.tree.IElementType
-import com.intellij.psi.{PsiFileFactory, SingleRootFileViewProvider}
+import com.intellij.psi.{JavaPsiFacade, PsiFileFactory, PsiManager, SingleRootFileViewProvider}
 import com.intellij.testFramework.LightVirtualFile
+import com.intellij.uiDesigner.core.config.FitNessePluginConfig
 import com.intellij.util.Function
 import fitnesse.idea.filetype.FitnesseLanguage
 import fitnesse.idea.psi.FitnesseFile
+import org.mockito.Mockito.when
+import org.scalatest.mock.MockitoSugar.mock
 import org.scalatest.{BeforeAndAfterAll, FunSuite, Matchers}
 
 trait ParserSuite extends FunSuite with Matchers with BeforeAndAfterAll {
@@ -32,6 +35,7 @@ trait ParserSuite extends FunSuite with Matchers with BeforeAndAfterAll {
 
   var app: MockApplicationEx = null
   var myProject: MockProjectEx = null
+  var myConfig: FitNessePluginConfig = null
 
   var myPsiManager: PsiManagerEx = null
   var myPsiFileFactory: PsiFileFactory = null
@@ -56,11 +60,15 @@ trait ParserSuite extends FunSuite with Matchers with BeforeAndAfterAll {
     myProject = new MockProjectEx(myTestRootDisposable)
     myPsiManager = new MockPsiManager(myProject)
     myPsiFileFactory = new PsiFileFactoryImpl(myPsiManager)
+    myConfig = mock[FitNessePluginConfig]
+    when(myConfig.getFixtureSuffix).thenReturn("Fixture")
 
     myProject.getPicoContainer.registerComponentInstance(classOf[PsiFileFactory].getName, myPsiFileFactory)
+    myProject.getPicoContainer.registerComponentInstance(classOf[PsiManager].getName,  myPsiManager)
 
     ApplicationManager.setApplication(app, myTestRootDisposable)
 
+    app.getPicoContainer.registerComponentInstance(classOf[FitNessePluginConfig].getName, myConfig)
     app.getPicoContainer.registerComponentInstance(classOf[FileTypeManager].getName, new MockFileTypeManager(new MockLanguageFileType(parserDefinition.getFileNodeType.getLanguage, "txt")))
     app.getPicoContainer.registerComponentInstance(classOf[EditorFactory].getName, editorFactory)
     app.getPicoContainer.registerComponentInstance(classOf[FileDocumentManager].getName, fileDocumentManager)
@@ -80,7 +88,10 @@ trait ParserSuite extends FunSuite with Matchers with BeforeAndAfterAll {
     app.getPicoContainer.unregisterComponent(classOf[PsiBuilderFactory].getName)
     app.getPicoContainer.unregisterComponent(classOf[ProgressManager].getName)
 
+    myProject.getPicoContainer.unregisterComponent(classOf[JavaPsiFacade].getName)
+    myProject.getPicoContainer.unregisterComponent(classOf[PsiManager].getName)
     myProject.getPicoContainer.unregisterComponent(classOf[PsiFileFactory].getName)
+    myProject.getPicoContainer.unregisterComponent(classOf[FitNessePluginConfig].getName)
   }
 
   abstract class Tree

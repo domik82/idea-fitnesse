@@ -57,7 +57,7 @@ class FitnesseParser extends PsiParser {
       val start = builder.mark()
 
       while (!builder.eof() && builder.getTokenType != FitnesseTokenType.ROW_END) {
-        if (builder.getTokenType == FitnesseTokenType.WORD) {
+        if (builder.getTokenType == FitnesseTokenType.TEXT) {
           val method = builder.mark()
           val methodType = readCellText(builder) match {
             case output if output.endsWith("?") => FitnesseElementType.DECISION_OUTPUT
@@ -177,7 +177,7 @@ class FitnesseParser extends PsiParser {
     var firstCell = true
     var firstCellText = ""
     while (!builder.eof() && builder.getTokenType != FitnesseTokenType.ROW_END) {
-      if (builder.getTokenType == FitnesseTokenType.CELL_START || builder.getTokenType == FitnesseTokenType.WORD) {
+      if (builder.getTokenType == FitnesseTokenType.CELL_START || builder.getTokenType == FitnesseTokenType.TEXT) {
         if (builder.getTokenType == FitnesseTokenType.CELL_START) {
           builder.advanceLexer() // Past CELL_START
         }

@@ -63,7 +63,7 @@ class FitnesseBlockTest extends ParserSuite {
     val rootBlock: FitnesseBlock = new FitnesseBlock(parseTree)
 
     assert(rootBlock.getSubBlocks.toString == "[FitnesseBlock:Fitnesse:COLLAPSIBLE]")
-    assert(rootBlock.getSubBlocks.get(0).getSubBlocks.toString == "[LeafBlock:FitnesseTokenType.COLLAPSIBLE_START, LeafBlock:FitnesseTokenType.WORD, TableBlock:Fitnesse:DECISION_TABLE, LeafBlock:FitnesseTokenType.COLLAPSIBLE_END]")
+    assert(rootBlock.getSubBlocks.get(0).getSubBlocks.toString == "[LeafBlock:FitnesseTokenType.COLLAPSIBLE_START, LeafBlock:FitnesseTokenType.TEXT, TableBlock:Fitnesse:DECISION_TABLE, LeafBlock:FitnesseTokenType.COLLAPSIBLE_END]")
   }
 
   test("should create blocks for decision table with empty cells") {

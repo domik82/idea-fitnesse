@@ -18,7 +18,7 @@ class FixtureClassReferenceTest extends PsiSuite {
   test("resolve simple class name") {
     val table = createTable("| script | table name |")
     val myPsiClass = mock[PsiClass]
-    when(myPsiShortNamesCache.getClassesByName(m_eq("TableName"), any[GlobalSearchScope])).thenReturn(Array(myPsiClass))
+    when(myPsiShortNamesCache.getClassesByName(m_eq("TableNameFixture"), any[GlobalSearchScope])).thenReturn(Array(myPsiClass))
 
     val result = table.fixtureClass.get.getReference.multiResolve(false)
 
@@ -29,7 +29,7 @@ class FixtureClassReferenceTest extends PsiSuite {
   test("resolve fully qualified class name") {
     val table = createTable("| script | eg.SampleTable |")
     val myPsiClass = mock[PsiClass]
-    when(myJavaPsiFacade.findClasses(m_eq("eg.SampleTable"), any[GlobalSearchScope])).thenReturn(Array(myPsiClass))
+    when(myJavaPsiFacade.findClasses(m_eq("eg.SampleTableFixture"), any[GlobalSearchScope])).thenReturn(Array(myPsiClass))
 
     val result = table.fixtureClass.get.getReference.multiResolve(false)
 
@@ -41,8 +41,8 @@ class FixtureClassReferenceTest extends PsiSuite {
     val table = createTable("| script | table name |")
     val myPsiClass = mock[PsiClass]
     val myScenario: ScenarioName = ScenarioNameElementType.INSTANCE.createPsi(new ScenarioNameStubImpl(mock[StubBase[Table]], "decision table", List()))
-    when(myPsiShortNamesCache.getClassesByName(m_eq("TableName"), any[GlobalSearchScope])).thenReturn(Array(myPsiClass))
-    when(myStubIndex.get(m_eq(ScenarioNameIndex.KEY), m_eq("TableName"), any[Project], any[GlobalSearchScope])).thenReturn(List(myScenario).asJava)
+    when(myPsiShortNamesCache.getClassesByName(m_eq("TableNameFixture"), any[GlobalSearchScope])).thenReturn(Array(myPsiClass))
+    when(myStubIndex.get(m_eq(ScenarioNameIndex.KEY), m_eq("TableNameFixture"), any[Project], any[GlobalSearchScope])).thenReturn(List(myScenario).asJava)
     val result = table.fixtureClass.get.getReference.multiResolve(false)
 
     assertResult(1) { result.length }
@@ -51,7 +51,7 @@ class FixtureClassReferenceTest extends PsiSuite {
 
   test("completion options for a fixture class") {
     val table = createTable("| script | table name |")
-    when(myPsiShortNamesCache.getAllClassNames()).thenReturn(Array("FixtureClass"))
+    when(myPsiShortNamesCache.getAllClassNames()).thenReturn(Array("FixtureClassFixture"))
     when(myStubIndex.getAllKeys(m_eq(ScenarioNameIndex.KEY), any[Project])).thenReturn(List("Scenario").asJava)
 
     val result = table.fixtureClass.get.getReference.getVariants()
@@ -62,7 +62,7 @@ class FixtureClassReferenceTest extends PsiSuite {
 
   test("completion options for decision table should contain both fixture classes and scenarios") {
     val table = createTable("| table name |")
-    when(myPsiShortNamesCache.getAllClassNames()).thenReturn(Array("FixtureClass"))
+    when(myPsiShortNamesCache.getAllClassNames()).thenReturn(Array("FixtureClassFixture"))
     when(myStubIndex.getAllKeys(m_eq(ScenarioNameIndex.KEY), any[Project])).thenReturn(List("Scenario").asJava)
 
     val result = table.fixtureClass.get.getReference.getVariants()

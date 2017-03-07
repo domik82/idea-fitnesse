@@ -24,14 +24,20 @@ class FixtureClassReference(referer: FixtureClass) extends PsiPolyVariantReferen
 
   // Return array of String, {@link PsiElement} and/or {@link LookupElement}
   override def getVariants = {
-    val allClassNames: Array[String] = PsiShortNamesCache.getInstance(project).getAllClassNames.filter(p => p != null).map(Regracer.regrace)
+    val allClassNames: Array[String] = PsiShortNamesCache.getInstance(project).getAllClassNames
+      .filter(isValid)
+      .map(c => Regracer.regrace(FixtureClassResolver.strip(c)))
     table match {
-      case _ : DecisionTable =>
-        val scenarioNames =  ScenarioNameIndex.INSTANCE.getAllKeys(project).map(Regracer.regrace).toArray
+      case _: DecisionTable =>
+        val scenarioNames = ScenarioNameIndex.INSTANCE.getAllKeys(project).map(Regracer.regrace).toArray
         Array.concat(allClassNames, scenarioNames).asInstanceOf[Array[AnyRef]]
       case _ =>
-       allClassNames.asInstanceOf[Array[AnyRef]]
+        allClassNames.asInstanceOf[Array[AnyRef]]
     }
+  }
+
+  private def isValid(className: String) = {
+    className != null && className.endsWith(FixtureClassResolver.SUFFIX) && !className.startsWith("Abstract")
   }
 
   override def multiResolve(b: Boolean): Array[ResolveResult] = table match {
@@ -63,17 +69,21 @@ class FixtureClassReference(referer: FixtureClass) extends PsiPolyVariantReferen
 
   protected def getReferencedClasses: Seq[ResolveResult] = fixtureClassName match {
     case Some(className) if isQualifiedName =>
-      JavaPsiFacade.getInstance(project).findClasses(className, FixtureClassReference.moduleWithDependenciesScope(module)).map(createReference)
+      JavaPsiFacade.getInstance(project).findClasses(resolveClass(className), FixtureClassReference.moduleWithDependenciesScope(module)).map(createReference)
     case Some(className) =>
-      PsiShortNamesCache.getInstance(project).getClassesByName(shortName.get, FixtureClassReference.moduleWithDependenciesScope(module)).map(createReference)
+      PsiShortNamesCache.getInstance(project).getClassesByName(resolveClass(shortName.get), FixtureClassReference.moduleWithDependenciesScope(module)).map(createReference)
     case None => Seq()
   }
 
   protected def getReferencedScenarios: Seq[ResolveResult] = referer.fixtureClassName match {
     case Some(className) if isQualifiedName => Seq()
     case Some(className) =>
-      ScenarioNameIndex.INSTANCE.get(className, project, FixtureClassReference.projectScope(project)).map(createReference).toSeq
+      ScenarioNameIndex.INSTANCE.get(resolveClass(className), project, FixtureClassReference.projectScope(project)).map(createReference).toSeq
     case None => Seq()
+  }
+
+  private def resolveClass(className: String) = {
+    FixtureClassResolver.resolve(className)
   }
 
   override def handleElementRename(newElementName: String): PsiElement = referer.setName(newElementName)
@@ -83,8 +93,8 @@ class FixtureClassReference(referer: FixtureClass) extends PsiPolyVariantReferen
 
 object FixtureClassReference {
   /**
-   * Override `scopeForTesting` for testing.
-   */
+    * Override `scopeForTesting` for testing.
+    */
   var scopeForTesting: Option[GlobalSearchScope] = None
 
   def moduleWithDependenciesScope(module: Option[Module]): GlobalSearchScope = scopeForTesting match {

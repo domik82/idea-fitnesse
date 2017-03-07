@@ -24,6 +24,17 @@ class CreateClassQuickFixTest extends PsiSuite {
     }
   }
 
+  test("test fixture name with suffix") {
+    val table = createTable("| foo bar |")
+    val fixtureClass = table.fixtureClass.get
+    when(smartPointerManager.createSmartPsiElementPointer(fixtureClass)).thenReturn(getFixtureClassPointer(fixtureClass))
+    val quickFix = new CreateClassQuickFix(fixtureClass)
+
+    assertResult("Create class 'FooBarFixture'") {
+      quickFix.getText
+    }
+  }
+
   override protected def beforeAll(): Unit = {
     super.beforeAll()
     myProject.getPicoContainer.registerComponentInstance(classOf[SmartPointerManager].getName, smartPointerManager)

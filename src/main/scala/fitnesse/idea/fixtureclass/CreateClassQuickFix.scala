@@ -18,10 +18,11 @@ import com.intellij.util.IncorrectOperationException
 import fitnesse.idea.etc.FitnesseBundle
 
 class CreateClassQuickFix(_refElement: FixtureClass) extends BaseIntentionAction {
+
   val elementPointer = SmartPointerManager.getInstance(_refElement.getProject).createSmartPsiElementPointer(_refElement)
 
   setText(getTitle(_refElement.fixtureClassName match {
-    case Some(name) => name
+    case Some(name) => FixtureClassResolver.resolve(name)
     case None => "What's this class called?"
   }))
 
@@ -63,12 +64,13 @@ class CreateClassQuickFix(_refElement: FixtureClass) extends BaseIntentionAction
     val manager = referenceElement.getManager
     val project = referenceElement.getProject
     val name = referenceElement.fixtureClassName.getOrElse("")
+    val varName = FixtureClassResolver.resolve(name)
     val qualifierName = ""
     val sourceFile = referenceElement.getContainingFile
     val module = ModuleUtilCore.findModuleForPsiElement(sourceFile)
     val title = FitnesseBundle.message("quickfix.create.class")
     // Warning: hooking into code from idea.jar (not openapi.jar)
-    val dialog = new CreateClassDialog(project, title, name, qualifierName, CreateClassKind.CLASS, false, module)
+    val dialog = new CreateClassDialog(project, title, varName, qualifierName, CreateClassKind.CLASS, false, module)
     dialog.show()
     dialog.getExitCode match {
       case DialogWrapper.OK_EXIT_CODE => Some(dialog.getTargetDirectory)
@@ -79,15 +81,16 @@ class CreateClassQuickFix(_refElement: FixtureClass) extends BaseIntentionAction
   def createClass(directory: PsiDirectory, name: String, manager: PsiManager, sourceFile: PsiFile): Option[PsiClass] = {
     val facade: JavaPsiFacade = JavaPsiFacade.getInstance(manager.getProject)
     val factory: PsiElementFactory = facade.getElementFactory
+    val newName = FixtureClassResolver.resolve(name)
     ApplicationManager.getApplication.runWriteAction(new Computable[Option[PsiClass]]() {
       def compute: Option[PsiClass] = {
         try {
-          val targetClass = JavaDirectoryService.getInstance.createClass(directory, name)
+          val targetClass = JavaDirectoryService.getInstance.createClass(directory, newName)
           PsiUtil.setModifierProperty(targetClass, PsiModifier.PUBLIC, true)
           Some(targetClass)
         } catch {
           case e: IncorrectOperationException =>
-            scheduleFileOrPackageCreationFailedMessageBox(e, name, directory, isPackage = false)
+            scheduleFileOrPackageCreationFailedMessageBox(e, newName, directory, isPackage = false)
             None
         }
       }

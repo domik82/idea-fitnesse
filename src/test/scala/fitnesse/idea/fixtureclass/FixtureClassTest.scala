@@ -24,7 +24,7 @@ class FixtureClassTest extends PsiSuite {
     val stub = FixtureClassElementType.INSTANCE.createStub(fixtureClass, null)
     val indexSink = new MockIndexSink()
     FixtureClassElementType.INSTANCE.indexStub(stub, indexSink)
-    assertResult("TableName") {
+    assertResult("TableNameFixture") {
       indexSink.value
     }
   }
