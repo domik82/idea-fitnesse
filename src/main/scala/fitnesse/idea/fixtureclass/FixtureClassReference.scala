@@ -25,7 +25,7 @@ class FixtureClassReference(referer: FixtureClass) extends PsiPolyVariantReferen
   // Return array of String, {@link PsiElement} and/or {@link LookupElement}
   override def getVariants = {
     val allClassNames: Array[String] = PsiShortNamesCache.getInstance(project).getAllClassNames
-      .filter(isValid)
+      .filter(name => FixtureClassResolver.isClassNameValid(name))
       .map(c => Regracer.regrace(FixtureClassResolver.strip(c)))
     table match {
       case _: DecisionTable =>
@@ -34,10 +34,6 @@ class FixtureClassReference(referer: FixtureClass) extends PsiPolyVariantReferen
       case _ =>
         allClassNames.asInstanceOf[Array[AnyRef]]
     }
-  }
-
-  private def isValid(className: String) = {
-    className != null && className.endsWith(FixtureClassResolver.SUFFIX) && !className.startsWith("Abstract")
   }
 
   override def multiResolve(b: Boolean): Array[ResolveResult] = table match {

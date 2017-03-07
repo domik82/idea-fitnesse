@@ -1,5 +1,6 @@
 package fitnesse.idea.fixtureclass
 
+import com.intellij.openapi.util.text.StringUtil
 import com.intellij.uiDesigner.core.config.FitNessePluginConfig
 
 class FixtureClassResolver {
@@ -7,24 +8,42 @@ class FixtureClassResolver {
 }
 
 object FixtureClassResolver {
-  val SUFFIX: String = FitNessePluginConfig.getInstance().getFixtureSuffix
+  private var suffix: String = FitNessePluginConfig.getInstance().getFixtureSuffix
 
-  def resolve(name: String): String = name + SUFFIX
+  def clearSuffix(): Unit = {
+    suffix = null
+  }
+
+  def setSuffix(newSuffix: String): Unit = {
+    suffix = newSuffix
+  }
+
+  def resolve(name: String): String = {
+    if (StringUtil.isEmptyOrSpaces(suffix)) {
+      name
+    } else {
+      name + suffix
+    }
+  }
 
   def strip(name: String): String = {
-    if(SUFFIX.isEmpty) {
+    if (StringUtil.isEmptyOrSpaces(suffix)) {
       name
     }else{
-      name.stripSuffix(SUFFIX)
+      name.stripSuffix(suffix)
     }
   }
 
   def isMatched(name: String) : Boolean = {
-    if(SUFFIX.isEmpty) {
+    if (StringUtil.isEmptyOrSpaces(suffix)) {
       true
     }else{
-      name.endsWith(SUFFIX)
+      name.endsWith(suffix)
     }
+  }
+
+  def isClassNameValid(className: String) : Boolean = {
+    isMatched(className) && !className.startsWith("Abstract")
   }
 
 }

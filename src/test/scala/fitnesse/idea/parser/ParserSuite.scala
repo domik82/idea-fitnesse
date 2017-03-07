@@ -61,7 +61,6 @@ trait ParserSuite extends FunSuite with Matchers with BeforeAndAfterAll {
     myPsiManager = new MockPsiManager(myProject)
     myPsiFileFactory = new PsiFileFactoryImpl(myPsiManager)
     myConfig = mock[FitNessePluginConfig]
-    when(myConfig.getFixtureSuffix).thenReturn("Fixture")
 
     myProject.getPicoContainer.registerComponentInstance(classOf[PsiFileFactory].getName, myPsiFileFactory)
     myProject.getPicoContainer.registerComponentInstance(classOf[PsiManager].getName,  myPsiManager)

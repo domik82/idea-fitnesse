@@ -6,6 +6,7 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.{PsiFile, SmartPointerManager, SmartPsiElementPointer}
 import fitnesse.idea.psi.PsiSuite
 import org.mockito.Mockito._
+import org.scalatest.Matchers
 
 class CreateClassQuickFixTest extends PsiSuite {
 
@@ -24,15 +25,28 @@ class CreateClassQuickFixTest extends PsiSuite {
     }
   }
 
-  test("test fixture name with suffix") {
-    val table = createTable("| foo bar |")
+  test("test fixture name without suffix") {
+    val table = createTable("| foo bar without suffix |")
     val fixtureClass = table.fixtureClass.get
     when(smartPointerManager.createSmartPsiElementPointer(fixtureClass)).thenReturn(getFixtureClassPointer(fixtureClass))
     val quickFix = new CreateClassQuickFix(fixtureClass)
 
-    assertResult("Create class 'FooBarFixture'") {
+    assertResult("Create class 'FooBarWithoutSuffix'") {
       quickFix.getText
     }
+  }
+
+  test("test fixture name with suffix") {
+    FixtureClassResolver.setSuffix("Fixture")
+    val table = createTable("| foo bar with suffix |")
+    val fixtureClass = table.fixtureClass.get
+    when(smartPointerManager.createSmartPsiElementPointer(fixtureClass)).thenReturn(getFixtureClassPointer(fixtureClass))
+    val quickFix = new CreateClassQuickFix(fixtureClass)
+
+    assertResult("Create class 'FooBarWithSuffixFixture'") {
+      quickFix.getText
+    }
+    FixtureClassResolver.clearSuffix()
   }
 
   override protected def beforeAll(): Unit = {

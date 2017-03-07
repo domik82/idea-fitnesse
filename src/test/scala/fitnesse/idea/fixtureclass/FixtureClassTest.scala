@@ -3,6 +3,7 @@ package fitnesse.idea.fixtureclass
 import com.intellij.psi.stubs.Stub
 import fitnesse.idea.parser.FitnesseElementType
 import fitnesse.idea.psi.{MockIndexSink, PsiSuite}
+import org.mockito.Mockito.when
 
 class FixtureClassTest extends PsiSuite {
 
@@ -24,8 +25,20 @@ class FixtureClassTest extends PsiSuite {
     val stub = FixtureClassElementType.INSTANCE.createStub(fixtureClass, null)
     val indexSink = new MockIndexSink()
     FixtureClassElementType.INSTANCE.indexStub(stub, indexSink)
+    assertResult("TableName") {
+      indexSink.value
+    }
+  }
+
+  test("index fixture class with suffix") {
+    FixtureClassResolver.setSuffix("Fixture")
+    val fixtureClass = createTable("| table name |").fixtureClass.get
+    val stub = FixtureClassElementType.INSTANCE.createStub(fixtureClass, null)
+    val indexSink = new MockIndexSink()
+    FixtureClassElementType.INSTANCE.indexStub(stub, indexSink)
     assertResult("TableNameFixture") {
       indexSink.value
     }
+    FixtureClassResolver.clearSuffix()
   }
 }

@@ -30,7 +30,7 @@ class DecisionTableSuite extends PsiSuite {
   override protected def beforeAll(): Unit = {
     super.beforeAll()
 
-    when(myPsiShortNamesCache.getClassesByName(m_eq("DecisionTableFixture"), any[GlobalSearchScope])).thenReturn(Array(myPsiClass))
+    when(myPsiShortNamesCache.getClassesByName(m_eq("DecisionTable"), any[GlobalSearchScope])).thenReturn(Array(myPsiClass))
     when(myPsiClass.findMethodsByName(m_eq("setA"), anyBoolean)).thenReturn(Array(myPsiMethodSetA))
     when(myPsiClass.findMethodsByName(m_eq("c"), anyBoolean)).thenReturn(Array(myPsiMethodC))
     when(myPsiClass.findMethodsByName(m_eq("setFancyLongName"), anyBoolean)).thenReturn(Array(myPsiMethodFancyLongName))
@@ -124,7 +124,7 @@ class DecisionTableSuite extends PsiSuite {
   test("scenario reference") {
     val myScenarioCallMe: ScenarioName = ScenarioNameImpl(new ScenarioNameStubImpl(mock[StubBase[Table]], "callMe", List("arg1", "arg2")))
     val output = createTable("| call me |").fixtureClass.get
-    when(myStubIndex.get(m_eq(ScenarioNameIndex.KEY), m_eq("CallMeFixture"), any[Project], any[GlobalSearchScope])).thenReturn(List(myScenarioCallMe).asJava)
+    when(myStubIndex.get(m_eq(ScenarioNameIndex.KEY), m_eq("CallMe"), any[Project], any[GlobalSearchScope])).thenReturn(List(myScenarioCallMe).asJava)
     bypassShortNameCache()
     assertResult(myScenarioCallMe) {
       val refs = output.getReferences
@@ -136,7 +136,7 @@ class DecisionTableSuite extends PsiSuite {
   test("scenario arguments as completion options") {
     val myScenarioCallMe: ScenarioName = ScenarioNameElementType.INSTANCE.createPsi(new ScenarioNameStubImpl(mock[StubBase[Table]], "decision table", List("arg1", "arg2")))
     val decisionInput = table.rows(1).cells(0)
-    when(myStubIndex.get(m_eq(ScenarioNameIndex.KEY), m_eq("DecisionTableFixture"), any[Project], any[GlobalSearchScope])).thenReturn(List(myScenarioCallMe).asJava)
+    when(myStubIndex.get(m_eq(ScenarioNameIndex.KEY), m_eq("DecisionTable"), any[Project], any[GlobalSearchScope])).thenReturn(List(myScenarioCallMe).asJava)
     bypassShortNameCache()
     assertResult(List("arg1", "arg2")) {
       val ref = decisionInput.getReference
