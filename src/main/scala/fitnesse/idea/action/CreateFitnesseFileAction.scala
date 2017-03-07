@@ -1,9 +1,11 @@
-package fitnesse.idea.filetype
+package fitnesse.idea.action
 
 import com.intellij.ide.actions.{CreateFileFromTemplateDialog, CreateFromTemplateAction}
 import com.intellij.openapi.project.{DumbAware, Project}
 import com.intellij.openapi.ui.InputValidator
 import com.intellij.psi.{PsiDirectory, PsiFile}
+import fitnesse.idea.filetype.FitnesseFileType
+import fitnesse.idea.rt.IntelliJFormatter
 import fitnesse.wiki.PathParser
 
 class CreateFitnesseFileAction extends CreateFromTemplateAction[PsiFile]("FitNesse Page", "Creates a FitNesse test/suite/static page", FitnesseFileType.FILE_ICON) with DumbAware {
@@ -84,8 +86,8 @@ class CreateFitnesseFileAction extends CreateFromTemplateAction[PsiFile]("FitNes
       |<WhereUsed/>
       |</properties>
       |""".stripMargin.replace("@@", templateName match {
-      case "OldStyleTestPage" => "<Test/>\n"
-      case "OldStyleSuitePage" => "<Suite/>\n"
+      case "OldStyleTestPage" => "<Test/>"+IntelliJFormatter.NEWLINE
+      case "OldStyleSuitePage" => "<Suite/>"+IntelliJFormatter.NEWLINE
       case _ => ""
     })
 }

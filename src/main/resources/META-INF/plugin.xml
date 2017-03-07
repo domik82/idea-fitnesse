@@ -137,13 +137,20 @@
   </module-components>
 
   <actions>
-    <action id="NewFitnesseFile" class="fitnesse.idea.filetype.CreateFitnesseFileAction">
+    <action id="NewFitnesseFile" class="fitnesse.idea.action.CreateFitnesseFileAction">
       <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewXml"/>
     </action>
 
+    <action id="OpenFitnesseInBrowser" class="fitnesse.idea.action.OpenInBrowserAction" text="Open FitNesse Test in Browser">
+      <add-to-group group-id="EditorPopupMenu"/>
+      <keyboard-shortcut first-keystroke="control alt shift G" keymap="$default"/>
+    </action>
   </actions>
 
   <extensions defaultExtensionNs="com.intellij">
+
+    <applicationConfigurable instance="com.intellij.uiDesigner.core.config.FitNessePluginConfigurable"/>
+    <applicationService serviceInterface="com.intellij.uiDesigner.core.config.FitNessePluginConfig" serviceImplementation="com.intellij.uiDesigner.core.config.FitNessePluginConfig"/>
 
     <treeStructureProvider implementation="fitnesse.idea.filetype.FitnesseTreeStructureProvider"/>
     <editorTabTitleProvider implementation="fitnesse.idea.filetype.FitnesseEditorTabTitleProvider"/>
