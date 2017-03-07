@@ -2,7 +2,9 @@ package fitnesse.idea.filetype
 
 import com.intellij.mock.{MockPsiDirectory, MockPsiFile, MockVirtualFile}
 import com.intellij.psi.{PsiDirectory, PsiFile}
+import fitnesse.idea.action.CreateFitnesseFileAction
 import fitnesse.idea.parser.ParserSuite
+import fitnesse.idea.rt.IntelliJFormatter
 import org.scalatest.BeforeAndAfter
 
 class CreateFitnesseFileActionTest extends ParserSuite with BeforeAndAfter {
@@ -21,7 +23,7 @@ class CreateFitnesseFileActionTest extends ParserSuite with BeforeAndAfter {
 
   test("create FitNesse file name") {
     val dir = new MyMockPsiDirectory("root")
-    assertResult ("NewPage.wiki") {
+    assertResult("NewPage.wiki") {
       val contentFile = action.createFile("NewPage", "TestPage", dir)
       contentFile.getVirtualFile.getName
     }
@@ -29,7 +31,7 @@ class CreateFitnesseFileActionTest extends ParserSuite with BeforeAndAfter {
 
   test("create old style FitNesse file in directory") {
     val dir = new MyMockPsiDirectory("root")
-    assertResult ("NewPage") {
+    assertResult("NewPage") {
       val contentFile = action.createFile("NewPage", "OldStyleTestPage", dir)
       contentFile.getParent.getName
     }
@@ -61,7 +63,7 @@ class CreateFitnesseFileActionTest extends ParserSuite with BeforeAndAfter {
     val dir = new MyMockPsiDirectory("root")
     val propertiesXml = action.createPropertiesFileContent("StaticPage")
 
-    assert(propertiesXml.contains("\n<properties>\n"))
+    assert(propertiesXml.contains(IntelliJFormatter.NEWLINE + "<properties>" + IntelliJFormatter.NEWLINE))
   }
 
   class MyMockPsiDirectory(name: String) extends MockPsiDirectory(myProject, myProject) {
@@ -81,4 +83,5 @@ class CreateFitnesseFileActionTest extends ParserSuite with BeforeAndAfter {
       }
     }
   }
+
 }

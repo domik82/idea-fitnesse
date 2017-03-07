@@ -36,7 +36,7 @@ import static java.lang.String.format;
  * This Formatter produces output in a format understood by IntelliJ.
  */
 public class IntelliJFormatter implements Formatter, TestsRunnerListener {
-    private static final String NEWLINE = System.getProperty("line.separator");
+    public static final String NEWLINE = System.getProperty("line.separator");
     private static final String CSI = "\u001B["; // "Control Sequence Initiator"
     private static final Pattern ANSI_ESCAPE_PATTERN = Pattern.compile("\u001B\\[.*?m");
 
@@ -101,13 +101,13 @@ public class IntelliJFormatter implements Formatter, TestsRunnerListener {
             } else if (node instanceof Span) {
                 Span span = (Span) node;
                 sb.append(colorResult(span.getAttribute("class")))
-                    .append(span.getChildrenHTML())
-                    .append(CSI + "0m");
+                        .append(span.getChildrenHTML())
+                        .append(CSI + "0m");
             } else if (node instanceof Tag && "BR".equals(((Tag) node).getTagName())) {
                 sb.append(NEWLINE);
             } else if (node.getChildren() != null) {
                 translate(node.getChildren(), sb);
-            } else if (node instanceof Text){
+            } else if (node instanceof Text) {
                 sb.append(node.getText());
             }
         }
@@ -149,7 +149,7 @@ public class IntelliJFormatter implements Formatter, TestsRunnerListener {
                         .append(tableFormatter.rightPaddingString(rowNr, colNr));
                 colNr++;
             }
-            sb.append("|\n");
+            sb.append("|").append(NEWLINE);
             rowNr++;
         }
         return sb.toString();
@@ -169,9 +169,20 @@ public class IntelliJFormatter implements Formatter, TestsRunnerListener {
             @Override
             public Iterator<Node> iterator() {
                 return new Iterator<Node>() {
-                    @Override public boolean hasNext() { return iter.hasMoreNodes(); }
-                    @Override public Node next() { return iter.nextNode(); }
-                    @Override public void remove() { throw new IllegalStateException("NodeList iterator.remove() should not have been called"); }
+                    @Override
+                    public boolean hasNext() {
+                        return iter.hasMoreNodes();
+                    }
+
+                    @Override
+                    public Node next() {
+                        return iter.nextNode();
+                    }
+
+                    @Override
+                    public void remove() {
+                        throw new IllegalStateException("NodeList iterator.remove() should not have been called");
+                    }
                 };
             }
         };
